@@ -20,6 +20,19 @@ class Produk extends Model
         'whatsapp',
         'alamat',
         'foto_produk',
-        'skala_usaha' // Pastikan ini juga ada jika ingin digunakan
+        'skala_usaha',
+        'user_id',     // Link to owner
+        'status'       // Approval status
     ];
+
+    // Relationship: UMKM belongs to a User (owner)
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
+
+    // Status constants for easy reference
+    const STATUS_PENDING = 'pending';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_REJECTED = 'rejected';
 }
