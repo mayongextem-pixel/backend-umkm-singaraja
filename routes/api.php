@@ -12,6 +12,21 @@ use App\Http\Controllers\Api\RegisterController;
 |--------------------------------------------------------------------------
 */
 
+/*
+|--------------------------------------------------------------------------
+| 0. TEST ROUTE (WAJIB UNTUK DEPLOYMENT VERCEL)
+|--------------------------------------------------------------------------
+| Route ini TIDAK pakai DB dan TIDAK pakai auth
+| Gunakan untuk cek backend sudah live atau belum
+*/
+Route::get('/test', function () {
+    return response()->json([
+        'message' => 'Laravel backend aktif di Vercel',
+        'status' => 'OK',
+        'time' => now()->toDateTimeString()
+    ]);
+});
+
 // ==========================================
 // 1. PUBLIC ROUTES (Anyone can access)
 // ==========================================
@@ -43,29 +58,29 @@ Route::middleware('auth:sanctum')->group(function () {
     // UMKM User Routes (Submit & manage own UMKM)
     // --------------------------------------
 
-    // Create new UMKM (status will be 'pending' for users, 'approved' for admin)
+    // Create new UMKM
     Route::post('/produk', [ProdukController::class, 'store']);
 
     // Get my own submissions
     Route::get('/my-umkm', [ProdukController::class, 'mySubmissions']);
 
-    // Update own UMKM (users can only edit pending, admin can edit any)
+    // Update own UMKM
     Route::put('/produk/{id}', [ProdukController::class, 'update']);
     Route::patch('/produk/{id}', [ProdukController::class, 'update']);
 
-    // Delete own UMKM (or admin can delete any)
+    // Delete own UMKM
     Route::delete('/produk/{id}', [ProdukController::class, 'destroy']);
 
     // --------------------------------------
     // Admin Only Routes
     // --------------------------------------
 
-    // Get ALL UMKM regardless of status (admin only)
+    // Get ALL UMKM regardless of status
     Route::get('/admin/produk', [ProdukController::class, 'indexAll']);
 
-    // Approve UMKM (admin only)
+    // Approve UMKM
     Route::post('/produk/{id}/approve', [ProdukController::class, 'approve']);
 
-    // Reject UMKM (admin only)
+    // Reject UMKM
     Route::post('/produk/{id}/reject', [ProdukController::class, 'reject']);
 });
